@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentReservations.WebApi", "EquipmentReservations.WebApi\EquipmentReservations.WebApi.csproj", "{BCF4C03C-FBF5-4AC1-BF8B-BC0849AA7CFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentReservations.WebApi", "src\EquipmentReservations.WebApi\EquipmentReservations.WebApi.csproj", "{BCF4C03C-FBF5-4AC1-BF8B-BC0849AA7CFC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E1CAEBE5-666A-4EED-AB32-B65458DDF9D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentReservations.Models", "EquipmentReservations.Models\EquipmentReservations.Models.csproj", "{BB69D4B8-E76B-421A-8644-3750142998F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentReservations.Models", "src\EquipmentReservations.Models\EquipmentReservations.Models.csproj", "{BB69D4B8-E76B-421A-8644-3750142998F7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentReservations.Domain", "EquipmentReservations.Domain\EquipmentReservations.Domain.csproj", "{808B4DD4-7034-4035-9544-67FA144F82D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentReservations.Domain", "src\EquipmentReservations.Domain\EquipmentReservations.Domain.csproj", "{808B4DD4-7034-4035-9544-67FA144F82D1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentReservations.DataLayer", "EquipmentReservations.DataLayer\EquipmentReservations.DataLayer.csproj", "{60E8BDBA-9800-49A6-ADDB-2D3F20FA8154}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentReservations.DataLayer", "src\EquipmentReservations.DataLayer\EquipmentReservations.DataLayer.csproj", "{60E8BDBA-9800-49A6-ADDB-2D3F20FA8154}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

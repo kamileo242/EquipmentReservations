@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: equipment_api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sqlserver
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Docker"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=EquipmentReservationDb;User=sa;Password=12345Abc!;TrustServerCertificate=True;"
+    networks:
+      - er-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: er_sql
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "12345Abc!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql 
+    networks:
+      - er-network
+    healthcheck:
+      test: ["CMD","/opt/mssql-tools/bin/sqlcmd","-S","localhost","-U","sa","-P","12345Abc!","-Q","select 1"]
+      interval: 10s
+      retries: 10
+      timeout: 3s
+
+networks:
+  er-network:
+    driver: bridge
+
+volumes:
+  sql_data:
