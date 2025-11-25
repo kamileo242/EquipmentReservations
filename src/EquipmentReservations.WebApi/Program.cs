@@ -86,6 +86,14 @@ namespace EquipmentReservations.WebApi
         };
       });
 
+      var publisherUrl = configuration["ReservationPublisher:Url"]
+                   ?? throw new InvalidOperationException("ReservationPublisher:Url nie jest ustawione!");
+
+      services.AddHttpClient<IReservationPublisher, ReservationPublisher>(client =>
+      {
+        client.BaseAddress = new Uri(publisherUrl);
+      });
+
       services.AddAuthorization();
       services.AddHttpContextAccessor();
 
