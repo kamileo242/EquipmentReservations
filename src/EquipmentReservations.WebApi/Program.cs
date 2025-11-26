@@ -3,11 +3,14 @@ using EquipmentReservations.DataLayer.Repositories;
 using EquipmentReservations.Domain;
 using EquipmentReservations.Domain.Services;
 using EquipmentReservations.Models;
+using EquipmentReservations.RabbitMq;
+using EquipmentReservations.RabbitMq.Services;
 using EquipmentReservations.WebApi.Converters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -66,6 +69,10 @@ namespace EquipmentReservations.WebApi
       var jwtSettings = configuration.GetSection("JwtSettings");
       var key = Encoding.UTF8.GetBytes(jwtSettings["Secret"]);
 
+      var rabbitSection = configuration.GetSection("RabbitMq");
+      services.Configure<RabbitMqSetup>(rabbitSection);
+      services.AddSingleton(r => r.GetRequiredService<IOptions<RabbitMqSetup>>().Value);
+
       services.AddAuthentication(options =>
       {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -113,6 +120,8 @@ namespace EquipmentReservations.WebApi
       services.AddScoped<ITimeProvider, TimeProvider>();
       services.AddScoped<IDtoConverter, DtoConverter>();
       services.AddScoped<ICacheService, MemoryCacheService>();
+
+      services.AddScoped<IReservationRabbitPublisher, ReservationRabbitPublisher>();
 
       services.Configure<RequestLocalizationOptions>(options =>
       {

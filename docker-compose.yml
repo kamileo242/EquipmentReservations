@@ -11,6 +11,7 @@ services:
       - "8080:8080"
     depends_on:
       - sqlserver
+      - rabbitmq
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker"
       ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=EquipmentReservationDb;User=sa;Password=12345Abc!;TrustServerCertificate=True;"
@@ -34,6 +35,18 @@ services:
       interval: 10s
       retries: 10
       timeout: 3s
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: er_rabbit
+    ports:
+      - "5672:5672"   # port AMQP dla aplikacji
+      - "15672:15672" # panel web http://localhost:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - er-network
 
 networks:
   er-network:

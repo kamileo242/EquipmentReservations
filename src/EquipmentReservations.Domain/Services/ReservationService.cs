@@ -1,6 +1,7 @@
 ﻿using EquipmentReservations.DataLayer;
 using EquipmentReservations.Models;
 using EquipmentReservations.Models.Exceptions;
+using EquipmentReservations.RabbitMq;
 using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentReservations.Domain.Services
@@ -12,21 +13,27 @@ namespace EquipmentReservations.Domain.Services
     private readonly IUnitOfWork unitOfWork;
     private readonly ITimeProvider timeProvider;
     private readonly IUserContext userContext;
+    private readonly IGuidProvider guidProvider;
     private readonly IReservationPublisher reservationPublisher;
+    private readonly IReservationRabbitPublisher reservationRabbitPublisher;
 
     public ReservationService(IReservationRepository reservationRepository,
         IEquipmentRepository equipmentRepository,
         IUnitOfWork unitOfWork,
         ITimeProvider timeProvider,
         IUserContext userContext,
-        IReservationPublisher reservationPublisher)
+        IGuidProvider guidProvider,
+        IReservationPublisher reservationPublisher,
+        IReservationRabbitPublisher reservationRabbitPublisher)
     {
       this.reservationRepository = reservationRepository;
       this.equipmentRepository = equipmentRepository;
       this.unitOfWork = unitOfWork;
       this.timeProvider = timeProvider;
       this.userContext = userContext;
+      this.guidProvider = guidProvider;
       this.reservationPublisher = reservationPublisher;
+      this.reservationRabbitPublisher = reservationRabbitPublisher;
     }
 
     public async Task<Reservation> GetByIdAsync(Guid id)
@@ -74,10 +81,12 @@ namespace EquipmentReservations.Domain.Services
       reservation.CreatedAt = timeProvider.GetDateTime();
       reservation.UpdatedAt = timeProvider.GetDateTime();
       reservation.ReservationStatus = ReservationStatus.Pending;
-
-      var result = await reservationRepository.AddAsync(reservation);
+      reservation.Id = guidProvider.GenerateGuid();
+      var added = await reservationRepository.AddAsync(reservation);
       await unitOfWork.SaveChangesAsync();
+      var result = await reservationRepository.GetByIDAsync(added.Id);
       await reservationPublisher.PublishReservationAsync(result, "Created");
+      await reservationRabbitPublisher.PublishReservationAsync(result);
 
       return result;
     }
@@ -133,9 +142,11 @@ namespace EquipmentReservations.Domain.Services
 
       try
       {
-        var result = await reservationRepository.UpdateAsync(reservation);
+        var updated = await reservationRepository.UpdateAsync(reservation);
         await unitOfWork.SaveChangesAsync();
+        var result = await reservationRepository.GetByIDAsync(updated.Id);
         await reservationPublisher.PublishReservationAsync(result, "Updated");
+        await reservationRabbitPublisher.PublishReservationAsync(result);
         return result;
       }
       catch (DbUpdateConcurrencyException)
