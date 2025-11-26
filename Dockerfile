@@ -9,6 +9,7 @@ COPY src/EquipmentReservations.WebApi/EquipmentReservations.WebApi.csproj Equipm
 COPY src/EquipmentReservations.Domain/EquipmentReservations.Domain.csproj EquipmentReservations.Domain/
 COPY src/EquipmentReservations.DataLayer/EquipmentReservations.DataLayer.csproj EquipmentReservations.DataLayer/
 COPY src/EquipmentReservations.Models/EquipmentReservations.Models.csproj EquipmentReservations.Models/
+COPY src/EquipmentReservations.RabbitMq/EquipmentReservations.RabbitMq.csproj EquipmentReservations.RabbitMq/
 
 RUN dotnet restore EquipmentReservations.WebApi/EquipmentReservations.WebApi.csproj
 

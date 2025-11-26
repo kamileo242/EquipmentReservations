@@ -7,9 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EquipmentReservations.DataLayer\EquipmentReservations.DataLayer.csproj" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\EquipmentReservations.Models\EquipmentReservations.Models.csproj" />
-    <ProjectReference Include="..\EquipmentReservations.RabbitMq\EquipmentReservations.RabbitMq.csproj" />
   </ItemGroup>
 
 </Project>
